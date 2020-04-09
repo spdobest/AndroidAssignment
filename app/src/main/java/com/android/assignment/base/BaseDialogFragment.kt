@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.android.assignment.R
@@ -23,13 +22,9 @@ import kotlinx.android.synthetic.main.dialogfragment_base.*
 
 abstract class BaseDialogFragment : DialogFragment() {
 
-    internal var rlErrorRoot: RelativeLayout? = null
-
     private var mActivity: BaseActivity? = null
 
     private var mLayoutId = 0
-
-    lateinit var mRootView: View
 
     /**
      * @return layout resource id
@@ -71,8 +66,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is BaseActivity) {
-            val activity = context
-            mActivity = activity
+            mActivity = context
         }
     }
 

@@ -34,17 +34,14 @@ class SplashDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView =
-            inflater.inflate(
-                R.layout.dialogfragment_splash,
-                container,
-                false
-            )
-        return rootView
+        return inflater.inflate(
+            R.layout.dialogfragment_splash,
+            container,
+            false
+        )
     }
 
     companion object {
-        fun getInstance() = SplashDialogFragment()
         val TAG = SplashDialogFragment::class.java.simpleName
     }
 }

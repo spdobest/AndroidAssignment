@@ -1,4 +1,4 @@
-package com.heyyy.main.utility
+package com.android.assignment.utility
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -32,10 +32,8 @@ import java.util.*
 class CommonUtils {
 
 
-    val UNBOUNDED =
+    private val UNBOUNDED =
         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-    private val TAG = "CommonUtils"
-
 
     fun getBitmap(url: String?): Bitmap? {
         var newurl: URL? = null
@@ -44,13 +42,13 @@ class CommonUtils {
         } catch (e: MalformedURLException) {
             e.printStackTrace()
         }
-        var mIcon_val: Bitmap? = null
+        var miconVal: Bitmap? = null
         try {
-            mIcon_val = BitmapFactory.decodeStream(newurl!!.openConnection().getInputStream())
+            miconVal = BitmapFactory.decodeStream(newurl!!.openConnection().getInputStream())
         } catch (e: IOException) {
             e.printStackTrace()
         }
-        return mIcon_val
+        return miconVal
     }
     /**
      * Convert pojo class to string string.
@@ -58,16 +56,16 @@ class CommonUtils {
      * @param object  the object of the class.
      * @return the string
      */
-/*public static String convertPojoToString(Object object){
-        String pojoString = "";
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            pojoString = mapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            Log.i(TAG, "convertPojoToString: "+e.getMessage());
-        }
-        return pojoString;
-    }*/
+    fun convertPojoToString(objects: Any): String {
+        var pojoString: String = ""
+        /* val  mapper ObjectMapper = ObjectMapper()
+         try {
+             pojoString = mapper.writeValueAsString(object)
+         } catch ( e:JsonProcessingException) {
+             Log.i("TAG", "convertPojoToString: "+e.getMessage())
+         }*/
+        return pojoString
+    }
     /**
      * Get class from string object.
      *
@@ -75,16 +73,16 @@ class CommonUtils {
      * @param mClassz the m classz
      * @return the object
      */
-/* public static Object getClassFromString(String value, Class mClassz){
-        Object requiredClass = null;
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            requiredClass = mapper.readValue(value,mClassz);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return requiredClass;
-    }*/
+    fun getClassFromString(value: String, mClassz: Any): Object? {
+        val requiredClass: Object? = null
+        /* val mapper:ObjectMapper =  ObjectMapper()
+         try {
+             requiredClass = mapper.readValue(value,mClassz);
+         } catch (IOException e) {
+             e.printStackTrace();
+         }*/
+        return requiredClass
+    }
     fun showOrHideKeyBoard(
         mContext: Context,
         rootLayout: View

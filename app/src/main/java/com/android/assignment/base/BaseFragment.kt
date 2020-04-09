@@ -17,16 +17,7 @@ import kotlin.properties.Delegates
 abstract class BaseFragment : Fragment() {
 
     private var mLayoutId by Delegates.notNull<Int>()
-    protected lateinit var mRequestTag: String
-    private lateinit var leftMenuClickListener: LeftMenuClickListener
     private lateinit var toolbarListener: ToolbarListener
-
-    interface LeftMenuClickListener {
-        //FOR LEFT MENU
-        fun onSearchClick(fragmentName: String?)
-
-        fun onLeftMenuItemClick(fragmentType: Int)
-    }
 
     interface ToolbarListener {
         fun setToolbarTitle(title: String?)
@@ -46,7 +37,6 @@ abstract class BaseFragment : Fragment() {
         super.onAttach(context)
         try {
             toolbarListener = context as ToolbarListener
-            leftMenuClickListener = context as LeftMenuClickListener
         } catch (e: ClassCastException) {
             throw ClassCastException(
                 (context as Activity).localClassName

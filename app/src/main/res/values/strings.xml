@@ -80,4 +80,10 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="enter_msg_hero">Enter Message Here...</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="menu_item">Menu Item</string>
+    <string name="extra_menu_item">Extra Menu Item</string>
+    <string name="rating">Rating</string>
+    <string name="logout">Logout</string>
 </resources>
