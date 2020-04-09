@@ -20,17 +20,21 @@ import com.android.assignment.R
 import com.android.assignment.ui.SplashDialogFragment
 import com.android.assignment.utility.ImageUtil
 import com.google.android.material.navigation.NavigationView
+import com.heyyy.main.utility.AppConstant
 import kotlinx.android.synthetic.main.activity_base.*
 
 
 abstract class BaseActivity : AppCompatActivity(), BaseInterface, BaseFragment.ToolbarListener {
 
     private var enableToolbarIcons: Boolean = false
+    private lateinit var onNavigationMenuCLickListener: OnNavigationMenuClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
         setUpDrawer()
+
+        onNavigationMenuCLickListener = this as OnNavigationMenuClickListener
     }
 
     protected fun useLayout(container: FrameLayout, @LayoutRes layout: Int): View? {
@@ -128,7 +132,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseInterface, BaseFragment.T
             when (menuItem.itemId) {
                 //HOME WITH TABS
                 R.id.menuleft_men -> {
-
+                    onNavigationMenuCLickListener.onNavigationMenuClick(AppConstant.NAV_TYPE_MEN)
                 }
                 R.id.menuleft_women -> {
 
@@ -139,7 +143,6 @@ abstract class BaseActivity : AppCompatActivity(), BaseInterface, BaseFragment.T
             }
             menuItem.isChecked = true
             drawerLayoutBase.closeDrawers()
-
             true
         }
     }
@@ -179,5 +182,9 @@ abstract class BaseActivity : AppCompatActivity(), BaseInterface, BaseFragment.T
                 colorId
             )
         )
+    }
+
+    interface OnNavigationMenuClickListener {
+        fun onNavigationMenuClick(type: Int)
     }
 }

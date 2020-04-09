@@ -8,7 +8,6 @@ package com.android.assignment.ui
 
 import android.os.Bundle
 import com.android.assignment.R
-
 import com.android.assignment.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_base.*
 
@@ -18,17 +17,5 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         useLayout(base_container, R.layout.activity_home)
         showToolbarIcons(true)
-    }
-
-    override fun onCartSelect() {
-
-    }
-
-    override fun onNotificationSelect() {
-
-    }
-
-    override fun onSearchSelect() {
-
     }
 }

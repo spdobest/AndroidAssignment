@@ -12,6 +12,10 @@ class AppConstant {
         val EMPTY_TEXT = ""
         val MALE = "Male"
         val FEMALE = "Female"
+
+        val NAV_TYPE_MEN = 1
+        val NAV_TYPE_WOMEN = 2
+        val NAV_TYPE_KIDS = 3
     }
 
     interface BundleKeys {

@@ -1,8 +1,7 @@
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_container_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.example.MyFragment"
     android:tag="base_fragment">
 
 
@@ -31,4 +30,4 @@
         android:background="@drawable/circular_bg"
         android:visibility="gone" />
 
-</androidx.fragment.app.FragmentContainerView>
+</FrameLayout>
