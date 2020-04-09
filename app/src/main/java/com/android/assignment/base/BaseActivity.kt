@@ -1,174 +1,183 @@
 package com.android.assignment.base
 
+
+import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
+import android.os.Handler
+import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.DialogFragment
 import com.android.assignment.R
-import com.android.assignment.base.BaseFragment.*
+import com.android.assignment.ui.SplashDialogFragment
+import com.android.assignment.utility.ImageUtil
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_base.*
-import kotlinx.android.synthetic.main.content_base.*
-import kotlinx.android.synthetic.main.toolbar_base.*
-import kotlinx.android.synthetic.main.toolbar_base.toolbar
 
-abstract class BaseActivity : AppCompatActivity(), LeftMenuClickListener,
-    View.OnClickListener, ToolbarListener, LoginSuccessListener {
-    protected var fragment: DialogFragment? = null
-    var onNavigationClick: OnNavigationClick? = null
-    private var isLeftDrawerEnable = true
-    private val isRightDrawerEnable = true
 
-    private lateinit var mDrawerToggle: ActionBarDrawerToggle
+abstract class BaseActivity : AppCompatActivity(), BaseInterface, BaseFragment.ToolbarListener {
+
+    private var enableToolbarIcons: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
-        onNavigationClick = this as OnNavigationClick
+        setUpDrawer()
+    }
+
+    protected fun useLayout(container: FrameLayout, @LayoutRes layout: Int): View? {
+        val inflater =
+            getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        return inflater.inflate(layout, container, true)
+    }
+
+    protected open fun showSplashDialog() {
+        val splashDialog = SplashDialogFragment()
+        try {
+            splashDialog.show(supportFragmentManager, SplashDialogFragment.TAG)
+        } catch (e: IllegalStateException) {
+            Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+        }
+
+        Handler().postDelayed({
+            splashDialog.dismiss()
+        }, 2000)
+    }
+
+    protected open fun lockDrawer() {
+        drawerLayoutBase.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    }
+
+    override fun showProgress() {
+
+    }
+
+    override fun hideProgress() {
+
+    }
+
+    override fun showError(error: String) {
+    }
+
+    override fun showMessage() {
+    }
+
+    private fun setUpDrawer() {
+
         setSupportActionBar(toolbar)
 
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu)
+        val ab: ActionBar? = supportActionBar
+        with(ab) {
+            this?.setHomeAsUpIndicator(R.drawable.ic_menu)
+            this?.setDisplayHomeAsUpEnabled(true)
+        }
+
+        val mDrawerToggle = ActionBarDrawerToggle(
+            this, drawerLayoutBase, toolbar,
+            R.string.drawer_open, R.string.drawer_close
+        )
+        drawerLayoutBase.addDrawerListener(mDrawerToggle)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        mImageViewUser.setOnClickListener(View.OnClickListener {
-            drawer_layout.openDrawer(
-                GravityCompat.END
-            )
-        })
-        if (nav_view != null) {
-            setupDrawerContentLeft(nav_view)
+        supportActionBar?.setHomeButtonEnabled(true)
+        mDrawerToggle.syncState()
+
+        setupDrawerContent(navigationViewHome)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        if (enableToolbarIcons) {
+            menuInflater.inflate(R.menu.menu_search, menu)
         }
-    }
-
-    protected fun setHomeUpIndicator() {
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.white))
-        if (supportActionBar != null) supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    }
-
-    protected fun setHomeUpIndicator(colorId: Int) {
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, colorId))
-        if (supportActionBar != null) supportActionBar!!.setHomeButtonEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-    }
-
-    protected fun setHomeUpButtonColor(colorId: Int) {
-        val upArrow =
-            ContextCompat.getDrawable(this, R.drawable.ic_menu)
-    }
-
-    protected fun setLayout(layoutId: Int) {
-        layoutInflater.inflate(layoutId, layout_container)
-    }
-
-    protected fun initDrawer() { /*getSupportActionBar().setTitle("");*/ // mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        initDrawerToggle()
-    }
-
-    protected fun lockDrawer() {
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    }
-
-    private fun initDrawerToggle() {
-        mDrawerToggle = object : ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.app_name,
-            R.string.abc_action_bar_home_description
-        ) {
-
-        }
-        drawer_layout.addDrawerListener(mDrawerToggle)
-        if (supportActionBar != null) supportActionBar!!.setDisplayShowHomeEnabled(true)
-        //        mDrawerToggle.syncState();
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                if (drawer_layout.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer_layout.closeDrawer(Gravity.RIGHT)
-                } else {
-                    if (isRightDrawerEnable) drawer_layout.openDrawer(Gravity.RIGHT)
-                }
+            R.id.home -> {
+
                 return true
             }
+            /*R.id.share -> {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
+                startActivity(
+                    Intent.createChooser(
+                        shareIntent,
+                        getString(R.string.send_to)
+                    )
+                )
+                return true
+            } */
         }
         return super.onOptionsItemSelected(item)
     }
 
-    protected fun showMenuButton() {
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        initDrawerToggle()
+    private fun setupDrawerContent(navigationView: NavigationView) {
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                //HOME WITH TABS
+                R.id.menuleft_men -> {
+
+                }
+                R.id.menuleft_women -> {
+
+                }
+                R.id.menuleft_kids -> {
+
+                }
+            }
+            menuItem.isChecked = true
+            drawerLayoutBase.closeDrawers()
+
+            true
+        }
     }
 
-    protected fun showBackButton() {
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        mDrawerToggle.isDrawerIndicatorEnabled = false
-        val upArrow =
-            ContextCompat.getDrawable(this, R.drawable.ic_back)
+    protected open fun showBackButton() {
         setSupportActionBar(toolbar)
     }
 
-    protected fun hideToolBar() {
-        toolbar.visibility = View.GONE
-    }
-
     override fun setToolbarTitle(title: String?) {
-        if (mTextViewTitleToolbar != null) mTextViewTitleToolbar.text = title
+        supportActionBar?.let {
+            it.title = title
+        }
     }
 
     override fun setToolbarVisibility(value: Int) {
         toolbar.visibility = value
     }
 
+    protected fun showToolbarIcons(value: Boolean) {
+        this.enableToolbarIcons = value
+    }
+
     override fun setToolbar() {
-        setHomeUpButtonColor(android.R.color.black)
+        setHomeUpButtonColor(R.color.black)
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun onSearchClick(searchName: String?) {}
-    override fun onLeftMenuItemClick(fragmentType: Int) {}
-    override fun onLoginSuccess() { //Dummy implementation
-    }
-
-    override fun onLogoutSuccess() { //Dummy Implementation.
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            android.R.id.home -> {
-            }
-        }
-    }
-
-    // for left navigation drawer
-    private fun setupDrawerContentLeft(navigationView: NavigationView) {
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-            }
-            menuItem.isChecked = true
-            drawer_layout.closeDrawers()
-            true
-        }
-    }
-
-    interface OnNavigationClick {
-        fun onNavigationClickListener(type: Int)
-    }
-
-    fun setLeftDrawerEnable(isLeftDrawerEnable: Boolean) {
-        this.isLeftDrawerEnable = isLeftDrawerEnable
-    }
-
-    companion object {
-        private const val TAG = "BaseActivity"
+    protected open fun setHomeUpButtonColor(colorId: Int) {
+        val upArrow =
+            ContextCompat.getDrawable(this, R.drawable.ic_delete)
+        supportActionBar?.setHomeAsUpIndicator(
+            ImageUtil.changeTintColor(
+                this,
+                upArrow,
+                colorId
+            )
+        )
     }
 }

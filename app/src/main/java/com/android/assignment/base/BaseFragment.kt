@@ -35,7 +35,6 @@ abstract class BaseFragment : Fragment() {
         fun onCartSelect()
         fun onNotificationSelect()
         fun onSearchSelect()
-        fun onRightNavigationSelect()
     }
 
     interface LoginSuccessListener {
@@ -45,16 +44,14 @@ abstract class BaseFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is BaseActivity) {
-            try {
-                toolbarListener = context
-                leftMenuClickListener = context
-            } catch (e: ClassCastException) {
-                throw ClassCastException(
-                    (context as Activity).localClassName
-                            + " must implement MenuClickListener, ToolbarListener, LoginSuccessListener"
-                )
-            }
+        try {
+            toolbarListener = context as ToolbarListener
+            leftMenuClickListener = context as LeftMenuClickListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                (context as Activity).localClassName
+                        + " must implement MenuClickListener, ToolbarListener, LoginSuccessListener"
+            )
         }
     }
 

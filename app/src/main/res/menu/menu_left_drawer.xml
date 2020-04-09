@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/leftmenu_group1"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menuleft_men"
+            android:icon="@drawable/ic_camera"
+            android:title="CHAT" />
+
+        <item
+            android:id="@+id/menuleft_women"
+            android:icon="@drawable/ic_camera"
+            android:title="CHAT" />
+        <item
+            android:id="@+id/menuleft_kids"
+            android:icon="@drawable/ic_camera"
+            android:title="CHAT" />
+        <item
+            android:id="@+id/menuleft_electronics"
+            android:icon="@drawable/ic_camera"
+            android:title="CHAT" />
+
+    </group>
+
+    <group
+        android:id="@+id/leftmenu_group2"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menuleft_acessories"
+            android:icon="@drawable/ic_camera"
+            android:title="Acessories" />
+        <item
+            android:id="@+id/menuleft_appliences"
+            android:icon="@drawable/ic_camera"
+            android:title="Appliances" />
+        <item
+            android:id="@+id/menuleft_other"
+            android:icon="@drawable/ic_camera"
+            android:title="Other" />
+    </group>
+
+</menu>
